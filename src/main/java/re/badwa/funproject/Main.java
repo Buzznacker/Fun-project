@@ -7,16 +7,26 @@ import re.badwa.funproject.adapter.impl.KeyAdapter;
 import re.badwa.funproject.dot.impl.BasicDot;
 import re.badwa.funproject.dot.Dot;
 import re.badwa.funproject.location.Location;
+import re.badwa.funproject.shape.*;
+import re.badwa.funproject.shape.Shape;
 import re.badwa.funproject.ui.FunPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class Main {
 
+    // Window properties
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 800;
+
+    // Keystrokes
+    public static final int FORWARD_KEY = KeyEvent.VK_UP;
+    public static final int BACKWARD_KEY = KeyEvent.VK_DOWN;
+    public static final int RIGHT_KEY = KeyEvent.VK_RIGHT;
+    public static final int LEFT_KEY = KeyEvent.VK_LEFT;
 
     private final Set<Adapter> adapters = new HashSet<>();
 

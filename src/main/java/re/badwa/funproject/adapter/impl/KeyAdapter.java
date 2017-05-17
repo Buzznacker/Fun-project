@@ -6,12 +6,11 @@ import re.badwa.funproject.adapter.Adapter;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashSet;
-import java.util.Set;
 
+// Credits to Badware for making this keystroke system, cba to do it.
 public class KeyAdapter implements KeyListener, Adapter {
 
-    private final Set<Integer> characters = new HashSet<>();
+    private int dUp = 0, dDown = 0, dLeft = 0, dRight = 0;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -19,58 +18,36 @@ public class KeyAdapter implements KeyListener, Adapter {
     }
 
     @Override
-    public synchronized void keyPressed(KeyEvent e) {
-        this.characters.add(e.getKeyCode());
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == Main.FORWARD_KEY) {
+            dUp = -1; //up
+        } else if (e.getKeyCode() == Main.LEFT_KEY) {
+            dLeft = -1; //left
+        } else if (e.getKeyCode() == Main.BACKWARD_KEY) {
+            dDown = 1; //down
+        } else if (e.getKeyCode() == Main.RIGHT_KEY) {
+            dRight = 1; //right
+        }
     }
 
     @Override
-    public synchronized void keyReleased(KeyEvent e) {
-        this.characters.remove(e.getKeyCode());
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == Main.FORWARD_KEY) {
+            dUp = 0; //up
+        } else if (e.getKeyCode() == Main.LEFT_KEY) {
+            dLeft = 0; //left
+        } else if (e.getKeyCode() == Main.BACKWARD_KEY) {
+            dDown = 0; //down
+        } else if (e.getKeyCode() == Main.RIGHT_KEY) {
+            dRight = 0; //right
+        }
     }
 
     @Override
     public void onTick(Main main) {
-        // Credits to Badware for this fuck fest of keystrokes code.
-        if ((characters.contains(38) && characters.contains(39)) || (characters.contains(87) && characters.contains(68))) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX() + 1,
-                            main.getDot().getLocation().getY() - 1));
-        } else if ((characters.contains(40) && characters.contains(39)) || (characters.contains(83) && characters.contains(68))) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX() + 1,
-                            main.getDot().getLocation().getY() + 1));
-        } else if ((characters.contains(40) && characters.contains(37)) || (characters.contains(83) && characters.contains(65))) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX() - 1,
-                            main.getDot().getLocation().getY() + 1));
-        } else if ((characters.contains(38) && characters.contains(37)) || (characters.contains(87) && characters.contains(65))) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX() - 1,
-                            main.getDot().getLocation().getY() - 1));
-        } else if (characters.contains(38) || characters.contains(87)) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX(),
-                            main.getDot().getLocation().getY() - 1));
-        } else if (characters.contains(40) || characters.contains(83)) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX(),
-                            main.getDot().getLocation().getY() + 1));
-        } else if (characters.contains(37) || characters.contains(65)) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX() - 1,
-                            main.getDot().getLocation().getY()));
-        } else if (characters.contains(39) || characters.contains(68)) {
-            main.getActions().offer(
-                    new MoveDotAction(
-                            main.getDot().getLocation().getX() + 1,
-                            main.getDot().getLocation().getY()));
-        }
+        main.getActions().offer(
+                new MoveDotAction(
+                        main.getDot().getLocation().getX() + (dRight + dLeft),
+                        main.getDot().getLocation().getY() + (dUp + dDown)));
     }
 }
